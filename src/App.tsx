@@ -18,6 +18,8 @@ import {
   Gamepad2,
   Share2,
   Bookmark,
+  Volume2,
+  VolumeX,
 } from 'lucide-react';
 import {
   ARSENAL_PILLARS,
@@ -47,6 +49,7 @@ import {
   StarOutlinePurple,
 } from './components/ComicIllustrations';
 import { CardDetailModal, MenuDrawerModal, ShowreelModal } from './components/DetailModals';
+import { comicAudio } from './utils/comicAudio';
 
 export default function App() {
   const [activeCategory, setActiveCategory] = useState<CategoryKey>('Todo');
@@ -58,28 +61,53 @@ export default function App() {
   const [savedCardIds, setSavedCardIds] = useState<string[]>(['kronos-overdrive']);
   const [remindedReleaseIds, setRemindedReleaseIds] = useState<string[]>(['rel-1']);
   const [activeBottomTab, setActiveBottomTab] = useState<'estrenos' | 'manifiesto'>('estrenos');
+  const [isAudioMuted, setIsAudioMuted] = useState<boolean>(() => comicAudio.isMuted());
 
   // Newsletter state
   const [newsletterEmail, setNewsletterEmail] = useState<string>('');
   const [newsletterStatus, setNewsletterStatus] = useState<'idle' | 'error' | 'success'>('idle');
 
+  const handleToggleAudioMute = () => {
+    const nextMuted = comicAudio.toggleMute();
+    setIsAudioMuted(nextMuted);
+  };
+
   const handleCycleSpeech = () => {
+    comicAudio.playComicPop();
     setSpeechIndex((prev) => (prev + 1) % HERO_SPEECH_QUOTES.length);
   };
 
   const handleToggleSaveCard = (id: string) => {
+    comicAudio.playComicZap();
     setSavedCardIds((prev) =>
       prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
     );
   };
 
   const handleToggleReminder = (id: string) => {
+    comicAudio.playComicZap();
     setRemindedReleaseIds((prev) =>
       prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
     );
   };
 
+  const handleSelectCategoryTab = (category: CategoryKey) => {
+    comicAudio.playComicPop();
+    setActiveCategory(category);
+  };
+
+  const handleOpenCard = (card: GeekCardItem) => {
+    comicAudio.playComicPow();
+    setSelectedCard(card);
+  };
+
+  const handleOpenShowreel = () => {
+    comicAudio.playComicPow();
+    setIsShowreelOpen(true);
+  };
+
   const handleCategoryClick = (category: CategoryKey) => {
+    comicAudio.playComicPop();
     setActiveCategory(category);
     const el = document.getElementById('universo');
     if (el) {
@@ -200,7 +228,10 @@ export default function App() {
         <div className="flex items-center shrink-0">
           <button
             type="button"
-            onClick={() => setIsMenuOpen(true)}
+            onClick={() => {
+              comicAudio.playComicPop();
+              setIsMenuOpen(true);
+            }}
             aria-label="Abrir menú de categorías y buscador"
             className="w-12 h-12 rounded-full bg-[#7C3AED] hover:bg-[#6D28D9] text-white flex items-center justify-center shadow-[0_0_24px_rgba(124,58,237,0.55)] transition-transform duration-150 hover:scale-105 active:scale-95 cursor-pointer whitespace-nowrap shrink-0"
           >
@@ -231,11 +262,8 @@ export default function App() {
 
             {/* Giant Brush/Comic Display Title + Crown + Lime Brush Underline */}
             <div className="relative inline-block max-w-full">
-              <CrownDoodle className="w-12 h-10 sm:w-16 sm:h-13 absolute -top-9 right-2 sm:right-6 rotate-6 animate-float-slow" />
-              <h1
-                className="font-comic text-[4.25rem] sm:text-[6.4rem] xl:text-[7.2rem] leading-[0.9] tracking-wider text-white uppercase select-none -rotate-3 drop-shadow-[0_6px_0_rgba(8,8,12,0.95)]"
-                style={{ textWrap: 'balance' }}
-              >
+              <CrownDoodle className="w-12 h-10 sm:w-16 sm:h-14 absolute -top-9 right-2 sm:right-6 rotate-6 animate-float-slow" />
+              <h1 className="font-comic text-[clamp(3.1rem,11vw,7.2rem)] leading-[0.9] tracking-wider text-white uppercase select-none -rotate-3 drop-shadow-[0_6px_0_rgba(8,8,12,0.95)] text-balance-safe">
                 IMPERIO GEEK
               </h1>
               <div className="w-[88%] mx-auto -mt-1 sm:-mt-2 -rotate-2">
@@ -263,7 +291,7 @@ export default function App() {
             {/* CTA Buttons Row + Hand-Drawn Left Arrow + Smiley & Lightning Stickers */}
             <div className="relative mt-8 flex flex-wrap items-center gap-4 sm:pl-10">
               {/* Hand-drawn curved arrow on the left (matching reference image) */}
-              <CurvedArrowLeft className="hidden sm:block w-11 h-22 absolute -left-3 -top-6" />
+              <CurvedArrowLeft className="hidden sm:block w-11 h-24 absolute -left-3 -top-6" />
 
               {/* Primary CTA: "Explorar universo" */}
               <a
@@ -277,7 +305,7 @@ export default function App() {
               {/* Secondary CTA: "Ver novedades" */}
               <button
                 type="button"
-                onClick={() => setIsShowreelOpen(true)}
+                onClick={handleOpenShowreel}
                 className="inline-flex items-center gap-2.5 px-7 py-4 rounded-full bg-[#0E0F17] hover:bg-[#191B29] text-white font-semibold text-sm sm:text-base border-2 border-[#7C3AED]/75 hover:border-[#B8FF01] transition-colors duration-150 cursor-pointer whitespace-nowrap shrink-0"
               >
                 <span>Ver novedades</span>
@@ -350,7 +378,7 @@ export default function App() {
                 <div className="pt-1 pl-1">
                   <button
                     type="button"
-                    onClick={() => setIsShowreelOpen(true)}
+                    onClick={handleOpenShowreel}
                     className="group inline-flex items-center gap-3 text-sm font-bold text-[#B8FF01] hover:text-white transition-colors cursor-pointer whitespace-nowrap shrink-0"
                   >
                     <span>Ver Especial Ahora</span>
@@ -363,27 +391,20 @@ export default function App() {
 
               {/* Right 16:9 Neon Cityscape Visual Banner */}
               <div className="lg:col-span-8 relative">
-                <div
-                  onClick={() => setIsShowreelOpen(true)}
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      e.preventDefault();
-                      setIsShowreelOpen(true);
-                    }
-                  }}
+                <button
+                  type="button"
+                  onClick={handleOpenShowreel}
                   aria-label="Reproducir especial Crónicas del Multiverso"
-                  className="group relative w-full h-[220px] sm:h-[260px] rounded-2xl overflow-hidden border border-[#2A2D42] cursor-pointer shadow-lg focus-visible:outline-2 focus-visible:outline-[#B8FF01]"
+                  className="group relative block w-full h-[220px] sm:h-[260px] text-left rounded-2xl overflow-hidden border border-[#2A2D42] cursor-pointer shadow-lg focus-visible:outline-2 focus-visible:outline-[#B8FF01]"
                 >
-                  <ShowreelSynthwaveArtSVG />
+                  <ShowreelSynthwaveArtSVG idPrefix="banner" />
 
                   {/* Measured Contrast Scrim */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent group-hover:via-black/10 transition-colors" />
 
                   {/* Center Glowing Lime Play Button */}
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-16 h-16 sm:w-18 sm:h-18 rounded-full bg-[#B8FF01] text-[#08080C] flex items-center justify-center shadow-[0_0_32px_rgba(184,255,1,0.65)] transition-transform duration-150 group-hover:scale-110">
+                    <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-[#B8FF01] text-[#08080C] flex items-center justify-center shadow-[0_0_32px_rgba(184,255,1,0.65)] transition-transform duration-150 group-hover:scale-110">
                       <Play className="w-7 h-7 fill-current ml-1" />
                     </div>
                   </div>
@@ -402,7 +423,7 @@ export default function App() {
                       4K · 60 FPS
                     </span>
                   </div>
-                </div>
+                </button>
 
                 {/* Purple Comic Spark Lines on the Right */}
                 <svg
@@ -427,7 +448,7 @@ export default function App() {
             className="relative px-6 sm:px-12 py-10 sm:py-12 border-b border-[#1E202E]"
           >
             {/* Cute Rabbit Comic Sticker on Top-Right Margin */}
-            <RabbitStickerDoodle className="hidden md:block w-13 h-15 absolute right-6 -top-8 z-10 animate-float-slow" />
+            <RabbitStickerDoodle className="hidden md:block w-14 h-16 absolute right-6 -top-8 z-10 animate-float-slow" />
 
             {/* Section Header + Interactive Filter Controls */}
             <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4 mb-8">
@@ -454,7 +475,7 @@ export default function App() {
                           type="button"
                           role="tab"
                           aria-selected={active}
-                          onClick={() => setActiveCategory(cat)}
+                          onClick={() => handleSelectCategoryTab(cat)}
                           className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
                             active
                               ? 'bg-[#7C3AED] text-white shadow-sm'
@@ -468,11 +489,30 @@ export default function App() {
                   )}
                 </div>
 
+                {/* Audio FX Toggle Button (Web Audio API) */}
+                <button
+                  type="button"
+                  onClick={handleToggleAudioMute}
+                  title={isAudioMuted ? 'Activar efectos de sonido cómic' : 'Silenciar efectos de sonido cómic'}
+                  aria-label={isAudioMuted ? 'Activar efectos de sonido cómic' : 'Silenciar efectos de sonido cómic'}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-semibold transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
+                    isAudioMuted
+                      ? 'bg-[#0B0C12] border-[#232536] text-zinc-400 hover:text-white'
+                      : 'bg-[#0B0C12] border-[#B8FF01]/40 text-[#B8FF01] hover:border-[#B8FF01]'
+                  }`}
+                >
+                  {isAudioMuted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
+                  <span>{isAudioMuted ? 'SFX Off' : 'SFX On'}</span>
+                </button>
+
                 {/* View All / Collapse Toggle Link (Matches "View All Projects ->" in reference) */}
                 {activeCategory === 'Todo' && (
                   <button
                     type="button"
-                    onClick={() => setShowAllCards(!showAllCards)}
+                    onClick={() => {
+                      comicAudio.playComicPop();
+                      setShowAllCards(!showAllCards);
+                    }}
                     className="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-[#B8FF01] hover:underline cursor-pointer whitespace-nowrap shrink-0"
                   >
                     <span>{showAllCards ? 'Mostrar destacados (4)' : 'Ver todo el archivo (8)'}</span>
@@ -489,59 +529,57 @@ export default function App() {
                 return (
                   <article
                     key={card.id}
-                    onClick={() => setSelectedCard(card)}
-                    role="button"
-                    tabIndex={0}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        setSelectedCard(card);
-                      }
-                    }}
-                    className="group bg-[#0B0C12] border border-[#222434] hover:border-[#7C3AED] rounded-2xl overflow-hidden flex flex-col justify-between transition-transform duration-150 hover:-translate-y-1.5 cursor-pointer focus-visible:outline-2 focus-visible:outline-[#B8FF01]"
+                    className="group geek-card-electric bg-[#222434] p-[1.5px] rounded-2xl overflow-hidden flex flex-col justify-between hover:-translate-y-1.5"
                   >
-                    {/* Card Top Illustration */}
-                    <div className="relative h-44 w-full overflow-hidden bg-[#161824]">
-                      <div className="w-full h-full transition-transform duration-200 group-hover:scale-105">
-                        <CardIllustrationSVG id={card.illustrationId} />
+                    {/* Traveling #B8FF01 Electric Border Halo Beam */}
+                    <span className="geek-card-electric-beam" aria-hidden="true" />
+
+                    {/* Bookmark quick button (Sibling to main card button for valid HTML5/ARIA) */}
+                    <button
+                      type="button"
+                      onClick={() => handleToggleSaveCard(card.id)}
+                      aria-label={isSaved ? `Quitar ${card.title} de Mi Lista` : `Guardar ${card.title} en Mi Lista`}
+                      className={`absolute top-3.5 right-3.5 z-20 w-8 h-8 rounded-full flex items-center justify-center transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-[#B8FF01] ${
+                        isSaved
+                          ? 'bg-[#B8FF01] text-[#08080C]'
+                          : 'bg-black/70 text-white hover:bg-[#7C3AED]'
+                      }`}
+                    >
+                      <Bookmark className="w-3.5 h-3.5 fill-current" />
+                    </button>
+
+                    {/* Primary Card Trigger Button */}
+                    <button
+                      type="button"
+                      onClick={() => handleOpenCard(card)}
+                      className="relative z-10 bg-[#0B0C12] rounded-[14.5px] overflow-hidden w-full text-left flex-1 flex flex-col justify-between cursor-pointer focus-visible:outline-2 focus-visible:outline-[#B8FF01]"
+                    >
+                      {/* Card Top Illustration */}
+                      <div className="relative h-44 w-full overflow-hidden bg-[#161824]">
+                        <div className="w-full h-full transition-transform duration-200 group-hover:scale-105">
+                          <CardIllustrationSVG id={card.illustrationId} />
+                        </div>
                       </div>
 
-                      {/* Bookmark quick button */}
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleToggleSaveCard(card.id);
-                        }}
-                        aria-label={isSaved ? 'Quitar de Mi Lista' : 'Guardar en Mi Lista'}
-                        className={`absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center transition-colors cursor-pointer ${
-                          isSaved
-                            ? 'bg-[#B8FF01] text-[#08080C]'
-                            : 'bg-black/65 text-white hover:bg-[#7C3AED]'
-                        }`}
-                      >
-                        <Bookmark className="w-3.5 h-3.5 fill-current" />
-                      </button>
-                    </div>
+                      {/* Card Dark Footer Info (Exact match to RUN! / DAYDREAMS / LOST SIGNAL / GROOVY TUNES) */}
+                      <div className="w-full p-4 flex items-end justify-between gap-3 bg-[#0B0C12]">
+                        <div className="min-w-0">
+                          <h3 className="font-comic text-lg text-white tracking-wider uppercase truncate group-hover:text-[#B8FF01] transition-colors">
+                            {card.title}
+                          </h3>
+                          {/* Zero-Pill Metadata Discipline: Clean unboxed text with · separator */}
+                          <p className="text-xs text-zinc-400 truncate mt-0.5">
+                            <span>{card.category}</span>
+                            <span className="mx-1.5" aria-hidden="true">·</span>
+                            <span>{card.subtitle}</span>
+                          </p>
+                        </div>
 
-                    {/* Card Dark Footer Info (Exact match to RUN! / DAYDREAMS / LOST SIGNAL / GROOVY TUNES) */}
-                    <div className="p-4 flex items-end justify-between gap-3 bg-[#0B0C12]">
-                      <div className="min-w-0">
-                        <h3 className="font-comic text-lg text-white tracking-wider uppercase truncate group-hover:text-[#B8FF01] transition-colors">
-                          {card.title}
-                        </h3>
-                        {/* Zero-Pill Metadata Discipline: Clean unboxed text with · separator */}
-                        <p className="text-xs text-zinc-400 truncate mt-0.5">
-                          <span>{card.category}</span>
-                          <span className="mx-1.5" aria-hidden="true">·</span>
-                          <span>{card.subtitle}</span>
-                        </p>
+                        <span className="w-7 h-7 rounded-full bg-[#161825] group-hover:bg-[#B8FF01] text-zinc-300 group-hover:text-[#08080C] flex items-center justify-center transition-colors shrink-0">
+                          <ArrowUpRight className="w-4 h-4" />
+                        </span>
                       </div>
-
-                      <span className="w-7 h-7 rounded-full bg-[#161825] group-hover:bg-[#B8FF01] text-zinc-300 group-hover:text-[#08080C] flex items-center justify-center transition-colors shrink-0">
-                        <ArrowUpRight className="w-4 h-4" />
-                      </span>
-                    </div>
+                    </button>
                   </article>
                 );
               })}
@@ -595,7 +633,7 @@ export default function App() {
                       className="group flex flex-col items-center text-center cursor-pointer focus-visible:outline-2 focus-visible:outline-[#B8FF01]"
                     >
                       <div
-                        className="w-13 h-13 rounded-xl flex items-center justify-center font-sans font-extrabold text-lg transition-transform duration-150 group-hover:scale-110"
+                        className="w-14 h-14 rounded-xl flex items-center justify-center font-sans font-extrabold text-lg transition-transform duration-150 group-hover:scale-110"
                         style={{
                           border: `2.5px solid ${isCurrent ? '#B8FF01' : pillar.borderColor}`,
                           color: isCurrent ? '#B8FF01' : pillar.textColor,
@@ -617,7 +655,7 @@ export default function App() {
 
               {/* Right Large Purple Loop Doodle */}
               <div className="hidden xl:block shrink-0">
-                <PurpleLoopDoodle className="w-24 h-22" />
+                <PurpleLoopDoodle className="w-24 h-24" />
               </div>
             </div>
           </section>
@@ -883,22 +921,36 @@ export default function App() {
       {/* =====================================================================
           INTERACTIVE MODALS & DRAWERS
          ===================================================================== */}
-      <ShowreelModal isOpen={isShowreelOpen} onClose={() => setIsShowreelOpen(false)} />
+      <ShowreelModal
+        isOpen={isShowreelOpen}
+        onClose={() => {
+          comicAudio.playComicSwoosh();
+          setIsShowreelOpen(false);
+        }}
+      />
 
       <CardDetailModal
         item={selectedCard}
-        onClose={() => setSelectedCard(null)}
+        onClose={() => {
+          comicAudio.playComicSwoosh();
+          setSelectedCard(null);
+        }}
         isSaved={selectedCard ? savedCardIds.includes(selectedCard.id) : false}
         onToggleSave={handleToggleSaveCard}
       />
 
       <MenuDrawerModal
         isOpen={isMenuOpen}
-        onClose={() => setIsMenuOpen(false)}
+        onClose={() => {
+          comicAudio.playComicSwoosh();
+          setIsMenuOpen(false);
+        }}
         activeCategory={activeCategory}
-        onSelectCategory={(cat) => setActiveCategory(cat)}
-        onSelectCard={(item) => setSelectedCard(item)}
+        onSelectCategory={handleSelectCategoryTab}
+        onSelectCard={handleOpenCard}
         savedIds={savedCardIds}
+        isAudioMuted={isAudioMuted}
+        onToggleAudioMute={handleToggleAudioMute}
       />
     </div>
   );

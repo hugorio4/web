@@ -502,135 +502,144 @@ export const HeroGeekCharacterSVG: React.FC<HeroGeekCharacterProps> = ({
    3. SHOWREEL / FEATURED BANNER ILLUSTRATION (16:9 Neon Sunset Cityscape)
    ========================================================================== */
 
-export const ShowreelSynthwaveArtSVG: React.FC = () => (
-  <svg
-    viewBox="0 0 800 340"
-    fill="none"
-    className="w-full h-full object-cover"
-    role="img"
-    aria-label="Ilustración panorámica de una metrópolis cyberpunk al atardecer con un explorador geek mirando el horizonte"
-  >
-    <defs>
-      <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stopColor="#1E1040" />
-        <stop offset="55%" stopColor="#4C1D95" />
-        <stop offset="100%" stopColor="#BE185D" />
-      </linearGradient>
-      <linearGradient id="sunGrad" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stopColor="#FB7185" />
-        <stop offset="100%" stopColor="#E11D48" />
-      </linearGradient>
-      <linearGradient id="waterGrad" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stopColor="#3B0764" />
-        <stop offset="100%" stopColor="#09090F" />
-      </linearGradient>
-    </defs>
+export const ShowreelSynthwaveArtSVG: React.FC<{ idPrefix?: string }> = ({
+  idPrefix = 'banner',
+}) => {
+  const skyGradId = `${idPrefix}-skyGrad`;
+  const sunGradId = `${idPrefix}-sunGrad`;
+  const waterGradId = `${idPrefix}-waterGrad`;
 
-    {/* Sky */}
-    <rect width="800" height="340" fill="url(#skyGrad)" />
+  return (
+    <svg
+      viewBox="0 0 800 340"
+      fill="none"
+      preserveAspectRatio="xMidYMid slice"
+      className="w-full h-full"
+      role="img"
+      aria-label="Ilustración panorámica de una metrópolis cyberpunk al atardecer con un explorador geek mirando el horizonte"
+    >
+      <defs>
+        <linearGradient id={skyGradId} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#1E1040" />
+          <stop offset="55%" stopColor="#4C1D95" />
+          <stop offset="100%" stopColor="#BE185D" />
+        </linearGradient>
+        <linearGradient id={sunGradId} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#FB7185" />
+          <stop offset="100%" stopColor="#E11D48" />
+        </linearGradient>
+        <linearGradient id={waterGradId} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#3B0764" />
+          <stop offset="100%" stopColor="#09090F" />
+        </linearGradient>
+      </defs>
 
-    {/* Stars */}
-    <circle cx="95" cy="45" r="2" fill="#FFFFFF" opacity="0.7" />
-    <circle cx="215" cy="30" r="1.5" fill="#FFFFFF" opacity="0.5" />
-    <circle cx="480" cy="40" r="2.5" fill="#FDE047" opacity="0.8" />
-    <circle cx="710" cy="52" r="2" fill="#FFFFFF" opacity="0.6" />
+      {/* Sky */}
+      <rect width="800" height="340" fill={`url(#${skyGradId})`} />
 
-    {/* Giant Crimson Neon Sun */}
-    <circle cx="565" cy="115" r="72" fill="url(#sunGrad)" />
+      {/* Stars */}
+      <circle cx="95" cy="45" r="2" fill="#FFFFFF" opacity="0.7" />
+      <circle cx="215" cy="30" r="1.5" fill="#FFFFFF" opacity="0.5" />
+      <circle cx="480" cy="40" r="2.5" fill="#FDE047" opacity="0.8" />
+      <circle cx="710" cy="52" r="2" fill="#FFFFFF" opacity="0.6" />
 
-    {/* Distant Skyline Silhouettes */}
-    <g fill="#2E1065" opacity="0.85">
-      <rect x="30" y="95" width="42" height="130" />
-      <rect x="82" y="120" width="35" height="105" />
-      <rect x="135" y="75" width="52" height="150" />
-      <rect x="210" y="110" width="45" height="115" />
-      <rect x="440" y="130" width="38" height="95" />
-      <rect x="520" y="98" width="46" height="127" />
-      <rect x="615" y="82" width="55" height="143" />
-      <rect x="690" y="115" width="42" height="110" />
-      <rect x="742" y="90" width="45" height="135" />
-    </g>
+      {/* Giant Crimson Neon Sun */}
+      <circle cx="565" cy="115" r="72" fill={`url(#${sunGradId})`} />
 
-    {/* Glowing building windows */}
-    <g fill="#F43F5E" opacity="0.75">
-      <rect x="148" y="92" width="6" height="14" />
-      <rect x="162" y="112" width="6" height="18" />
-      <rect x="532" y="118" width="8" height="12" />
-      <rect x="630" y="102" width="10" height="6" />
-      <rect x="630" y="116" width="10" height="6" />
-      <rect x="755" y="108" width="8" height="22" />
-    </g>
+      {/* Distant Skyline Silhouettes */}
+      <g fill="#2E1065" opacity="0.85">
+        <rect x="30" y="95" width="42" height="130" />
+        <rect x="82" y="120" width="35" height="105" />
+        <rect x="135" y="75" width="52" height="150" />
+        <rect x="210" y="110" width="45" height="115" />
+        <rect x="440" y="130" width="38" height="95" />
+        <rect x="520" y="98" width="46" height="127" />
+        <rect x="615" y="82" width="55" height="143" />
+        <rect x="690" y="115" width="42" height="110" />
+        <rect x="742" y="90" width="45" height="135" />
+      </g>
 
-    {/* Neon River / Bay Water */}
-    <rect x="0" y="220" width="800" height="120" fill="url(#waterGrad)" />
+      {/* Glowing building windows */}
+      <g fill="#F43F5E" opacity="0.75">
+        <rect x="148" y="92" width="6" height="14" />
+        <rect x="162" y="112" width="6" height="18" />
+        <rect x="532" y="118" width="8" height="12" />
+        <rect x="630" y="102" width="10" height="6" />
+        <rect x="630" y="116" width="10" height="6" />
+        <rect x="755" y="108" width="8" height="22" />
+      </g>
 
-    {/* Pink/Crimson Sunset Reflections on Water */}
-    <path
-      d="M475 232H655L690 340H440L475 232Z"
-      fill="#FB7185"
-      opacity="0.35"
-    />
-    <rect x="495" y="242" width="140" height="5" rx="2.5" fill="#F43F5E" opacity="0.8" />
-    <rect x="480" y="258" width="170" height="6" rx="3" fill="#FB7185" opacity="0.7" />
-    <rect x="510" y="276" width="115" height="5" rx="2.5" fill="#F43F5E" opacity="0.6" />
-    <rect x="465" y="296" width="185" height="7" rx="3.5" fill="#E11D48" opacity="0.5" />
+      {/* Neon River / Bay Water */}
+      <rect x="0" y="220" width="800" height="120" fill={`url(#${waterGradId})`} />
 
-    {/* Foreground Comic Rocks Left & Right */}
-    <path d="M0 245L145 275L190 340H0V245Z" fill="#0F1020" stroke="#7C3AED" strokeWidth="2" />
-    <path d="M800 235L645 280L595 340H800V235Z" fill="#0F1020" stroke="#7C3AED" strokeWidth="2" />
-
-    {/* Protagonist Character with Backpack Looking at the Skyline (Center-Left like Reference Image) */}
-    <g>
-      {/* Torso & Jacket */}
+      {/* Pink/Crimson Sunset Reflections on Water */}
       <path
-        d="M235 340L252 208C268 192 315 192 332 210L352 340H235Z"
-        fill="#1E293B"
-        stroke="#08080C"
-        strokeWidth="4"
-      />
-      {/* Cyan Hood Rim */}
-      <path
-        d="M254 206C275 188 312 188 332 208C318 220 272 222 254 206Z"
-        fill="#0284C7"
-        stroke="#08080C"
-        strokeWidth="3.5"
-      />
-      {/* Adventurer Backpack */}
-      <rect
-        x="218"
-        y="224"
-        width="92"
-        height="112"
-        rx="18"
-        fill="#4C1D95"
-        stroke="#08080C"
-        strokeWidth="4"
-      />
-      <rect
-        x="230"
-        y="240"
-        width="68"
-        height="28"
-        rx="8"
+        d="M475 232H655L690 340H440L475 232Z"
         fill="#FB7185"
         opacity="0.35"
       />
-      {/* Head & Fluffy Hair Silhouette with Sunset Rim Light */}
-      <circle cx="292" cy="152" r="34" fill="#1E1B4B" stroke="#08080C" strokeWidth="4" />
-      <path
-        d="M255 155C242 132 260 105 288 108C308 94 338 112 332 138C344 150 335 172 318 172"
-        fill="#09090F"
-      />
-      {/* Pink rim highlight on face profile */}
-      <path
-        d="M324 138C332 152 330 168 320 178"
-        stroke="#FB7185"
-        strokeWidth="3.5"
-        strokeLinecap="round"
-      />
-    </g>
-  </svg>
-);
+      <rect x="495" y="242" width="140" height="5" rx="2.5" fill="#F43F5E" opacity="0.8" />
+      <rect x="480" y="258" width="170" height="6" rx="3" fill="#FB7185" opacity="0.7" />
+      <rect x="510" y="276" width="115" height="5" rx="2.5" fill="#F43F5E" opacity="0.6" />
+      <rect x="465" y="296" width="185" height="7" rx="3.5" fill="#E11D48" opacity="0.5" />
+
+      {/* Foreground Comic Rocks Left & Right */}
+      <path d="M0 245L145 275L190 340H0V245Z" fill="#0F1020" stroke="#7C3AED" strokeWidth="2" />
+      <path d="M800 235L645 280L595 340H800V235Z" fill="#0F1020" stroke="#7C3AED" strokeWidth="2" />
+
+      {/* Protagonist Character with Backpack Looking at the Skyline (Center-Left like Reference Image) */}
+      <g>
+        {/* Torso & Jacket */}
+        <path
+          d="M235 340L252 208C268 192 315 192 332 210L352 340H235Z"
+          fill="#1E293B"
+          stroke="#08080C"
+          strokeWidth="4"
+        />
+        {/* Cyan Hood Rim */}
+        <path
+          d="M254 206C275 188 312 188 332 208C318 220 272 222 254 206Z"
+          fill="#0284C7"
+          stroke="#08080C"
+          strokeWidth="3.5"
+        />
+        {/* Adventurer Backpack */}
+        <rect
+          x="218"
+          y="224"
+          width="92"
+          height="112"
+          rx="18"
+          fill="#4C1D95"
+          stroke="#08080C"
+          strokeWidth="4"
+        />
+        <rect
+          x="230"
+          y="240"
+          width="68"
+          height="28"
+          rx="8"
+          fill="#FB7185"
+          opacity="0.35"
+        />
+        {/* Head & Fluffy Hair Silhouette with Sunset Rim Light */}
+        <circle cx="292" cy="152" r="34" fill="#1E1B4B" stroke="#08080C" strokeWidth="4" />
+        <path
+          d="M255 155C242 132 260 105 288 108C308 94 338 112 332 138C344 150 335 172 318 172"
+          fill="#09090F"
+        />
+        {/* Pink rim highlight on face profile */}
+        <path
+          d="M324 138C332 152 330 168 320 178"
+          stroke="#FB7185"
+          strokeWidth="3.5"
+          strokeLinecap="round"
+        />
+      </g>
+    </svg>
+  );
+};
 
 /* ==========================================================================
    4. FEATURED PROJECT / UNIVERSE CARD ILLUSTRATIONS (8 Custom Comic Scenes)
@@ -641,7 +650,13 @@ export const CardIllustrationSVG: React.FC<{ id: IllustrationId }> = ({ id }) =>
     /* 1. CYBER RUNNER (Matches "RUN!" Yellow Halftone Sprinting Character Card) */
     case 'cyber-runner':
       return (
-        <svg viewBox="0 0 400 250" fill="none" className="w-full h-full object-cover" aria-hidden="true">
+        <svg
+          viewBox="0 0 400 250"
+          fill="none"
+          preserveAspectRatio="xMidYMid slice"
+          className="w-full h-full"
+          aria-hidden="true"
+        >
           <rect width="400" height="250" fill="#FACC15" />
           {/* White dynamic comic burst */}
           <path d="M0 35L400 0V195L0 140V35Z" fill="#FEF08A" />
@@ -674,7 +689,13 @@ export const CardIllustrationSVG: React.FC<{ id: IllustrationId }> = ({ id }) =>
     /* 2. CRT DREAMER (Matches "DAYDREAMS" Warm Orange TV-Head Character Card) */
     case 'crt-dreamer':
       return (
-        <svg viewBox="0 0 400 250" fill="none" className="w-full h-full object-cover" aria-hidden="true">
+        <svg
+          viewBox="0 0 400 250"
+          fill="none"
+          preserveAspectRatio="xMidYMid slice"
+          className="w-full h-full"
+          aria-hidden="true"
+        >
           <rect width="400" height="250" fill="#EA580C" />
           {/* Warm studio background panels */}
           <rect x="28" y="18" width="95" height="140" rx="6" fill="#C2410C" />
@@ -705,7 +726,13 @@ export const CardIllustrationSVG: React.FC<{ id: IllustrationId }> = ({ id }) =>
     /* 3. MULTIVERSE SIGNAL (Matches "LOST SIGNAL" Indigo/Crimson Sci-Fi Portal Card) */
     case 'multiverse-signal':
       return (
-        <svg viewBox="0 0 400 250" fill="none" className="w-full h-full object-cover" aria-hidden="true">
+        <svg
+          viewBox="0 0 400 250"
+          fill="none"
+          preserveAspectRatio="xMidYMid slice"
+          className="w-full h-full"
+          aria-hidden="true"
+        >
           <rect width="400" height="250" fill="#1E1B4B" />
           {/* Diagonal crimson/violet energy beams */}
           <path d="M180 0L400 130V250L110 0H180Z" fill="#E11D48" opacity="0.85" />
@@ -729,14 +756,20 @@ export const CardIllustrationSVG: React.FC<{ id: IllustrationId }> = ({ id }) =>
     /* 4. MECHA FROG (Matches "GROOVY TUNES" Lime Frog with Gaming Headphones Card) */
     case 'mecha-frog':
       return (
-        <svg viewBox="0 0 400 250" fill="none" className="w-full h-full object-cover" aria-hidden="true">
+        <svg
+          viewBox="0 0 400 250"
+          fill="none"
+          preserveAspectRatio="xMidYMid slice"
+          className="w-full h-full"
+          aria-hidden="true"
+        >
           <rect width="400" height="250" fill="#065F46" />
           {/* Glowing aura */}
           <circle cx="200" cy="145" r="110" fill="#10B981" opacity="0.35" />
           {/* Floating Music Notes */}
-          <text x="45" y="75" fill="#FACC15" fontSize="34" fontWeight="bold">♪</text>
-          <text x="325" y="70" fill="#FFFFFF" fontSize="36" fontWeight="bold">♫</text>
-          <text x="335" y="165" fill="#FB7185" fontSize="30" fontWeight="bold">♪</text>
+          <text x="45" y="75" fill="#FACC15" fontFamily="sans-serif" fontSize="34" fontWeight="bold">♪</text>
+          <text x="325" y="70" fill="#FFFFFF" fontFamily="sans-serif" fontSize="36" fontWeight="bold">♫</text>
+          <text x="335" y="165" fill="#FB7185" fontFamily="sans-serif" fontSize="30" fontWeight="bold">♪</text>
           {/* Headphone Band */}
           <path d="M108 135C108 62 292 62 292 135" stroke="#18181B" strokeWidth="16" strokeLinecap="round" />
           <path d="M118 115C132 68 268 68 282 115" stroke="#B8FF01" strokeWidth="4" strokeLinecap="round" />
@@ -767,7 +800,13 @@ export const CardIllustrationSVG: React.FC<{ id: IllustrationId }> = ({ id }) =>
     /* 5. SPIDER NOIR / INK CHRONICLES */
     case 'spider-noir':
       return (
-        <svg viewBox="0 0 400 250" fill="none" className="w-full h-full object-cover" aria-hidden="true">
+        <svg
+          viewBox="0 0 400 250"
+          fill="none"
+          preserveAspectRatio="xMidYMid slice"
+          className="w-full h-full"
+          aria-hidden="true"
+        >
           <rect width="400" height="250" fill="#991B1B" />
           <circle cx="300" cy="70" r="52" fill="#FEF08A" />
           {/* City gothic spires */}
@@ -786,7 +825,13 @@ export const CardIllustrationSVG: React.FC<{ id: IllustrationId }> = ({ id }) =>
     /* 6. SHONEN ECLIPSE */
     case 'shonen-eclipse':
       return (
-        <svg viewBox="0 0 400 250" fill="none" className="w-full h-full object-cover" aria-hidden="true">
+        <svg
+          viewBox="0 0 400 250"
+          fill="none"
+          preserveAspectRatio="xMidYMid slice"
+          className="w-full h-full"
+          aria-hidden="true"
+        >
           <rect width="400" height="250" fill="#3B0764" />
           {/* Eclipse Ring */}
           <circle cx="200" cy="115" r="78" fill="#09090F" stroke="#B8FF01" strokeWidth="8" />
@@ -802,7 +847,13 @@ export const CardIllustrationSVG: React.FC<{ id: IllustrationId }> = ({ id }) =>
     /* 7. NEURAL DECK XR */
     case 'neural-deck':
       return (
-        <svg viewBox="0 0 400 250" fill="none" className="w-full h-full object-cover" aria-hidden="true">
+        <svg
+          viewBox="0 0 400 250"
+          fill="none"
+          preserveAspectRatio="xMidYMid slice"
+          className="w-full h-full"
+          aria-hidden="true"
+        >
           <rect width="400" height="250" fill="#0F172A" />
           {/* Grid lines */}
           <path d="M0 190H400M0 220H400M80 165L20 250M320 165L380 250" stroke="#38BDF8" strokeWidth="2" opacity="0.4" />
@@ -816,7 +867,13 @@ export const CardIllustrationSVG: React.FC<{ id: IllustrationId }> = ({ id }) =>
     /* 8. GALACTICA DUNE */
     case 'galactica-dune':
       return (
-        <svg viewBox="0 0 400 250" fill="none" className="w-full h-full object-cover" aria-hidden="true">
+        <svg
+          viewBox="0 0 400 250"
+          fill="none"
+          preserveAspectRatio="xMidYMid slice"
+          className="w-full h-full"
+          aria-hidden="true"
+        >
           <rect width="400" height="250" fill="#7C2D12" />
           <circle cx="115" cy="72" r="42" fill="#FDE047" />
           <circle cx="285" cy="95" r="22" fill="#FB923C" />
@@ -837,7 +894,8 @@ export const MangaManifestoArtSVG: React.FC = () => (
   <svg
     viewBox="0 0 480 280"
     fill="none"
-    className="w-full h-full object-cover"
+    preserveAspectRatio="xMidYMid slice"
+    className="w-full h-full"
     role="img"
     aria-label="Viñeta de cómic en verde lima y tinta negra con personaje geek sonriente y corona"
   >
@@ -852,13 +910,37 @@ export const MangaManifestoArtSVG: React.FC = () => (
 
     {/* Tilted Comic Mantra Words on the Left (Just like "FOCUS / DISCIPLINE / CONSISTENCY" in Reference) */}
     <g transform="rotate(-14 95 125)">
-      <text x="22" y="95" fill="#08080C" className="font-comic" fontSize="29" fontWeight="bold" letterSpacing="1">
+      <text
+        x="22"
+        y="95"
+        fill="#08080C"
+        fontFamily="'Bangers', Impact, 'Arial Black', sans-serif"
+        fontSize="29"
+        fontWeight="bold"
+        letterSpacing="1.5"
+      >
         CULTURA POP
       </text>
-      <text x="22" y="128" fill="#08080C" className="font-comic" fontSize="29" fontWeight="bold" letterSpacing="1">
+      <text
+        x="22"
+        y="128"
+        fill="#08080C"
+        fontFamily="'Bangers', Impact, 'Arial Black', sans-serif"
+        fontSize="29"
+        fontWeight="bold"
+        letterSpacing="1.5"
+      >
         GAMING REAL
       </text>
-      <text x="22" y="161" fill="#08080C" className="font-comic" fontSize="29" fontWeight="bold" letterSpacing="1">
+      <text
+        x="22"
+        y="161"
+        fill="#08080C"
+        fontFamily="'Bangers', Impact, 'Arial Black', sans-serif"
+        fontSize="29"
+        fontWeight="bold"
+        letterSpacing="1.5"
+      >
         CERO RELLENO
       </text>
       <path d="M22 172C68 168 125 168 175 172" stroke="#7C3AED" strokeWidth="4" strokeLinecap="round" />

@@ -1,5 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { X, Play, Pause, Bookmark, Check, Search, ArrowUpRight, Film, Calendar } from 'lucide-react';
+import {
+  X,
+  Play,
+  Pause,
+  Bookmark,
+  Check,
+  Search,
+  ArrowUpRight,
+  Film,
+  Calendar,
+  Volume2,
+  VolumeX,
+} from 'lucide-react';
 import {
   CategoryKey,
   FEATURED_SHOWREEL,
@@ -8,6 +20,7 @@ import {
   UNIVERSE_ITEMS,
 } from '../data/geekContent';
 import { CardIllustrationSVG, ShowreelSynthwaveArtSVG } from './ComicIllustrations';
+import { comicAudio } from '../utils/comicAudio';
 
 /* ==========================================================================
    1. SHOWREEL / ÚLTIMA NOVEDAD LIGHTBOX MODAL
@@ -27,9 +40,13 @@ export const ShowreelModal: React.FC<ShowreelModalProps> = ({ isOpen, onClose })
       if (e.key === 'Escape') onClose();
     };
     if (isOpen) {
+      document.body.style.overflow = 'hidden';
       window.addEventListener('keydown', handleKeyDown);
     }
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', handleKeyDown);
+    };
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;
@@ -38,14 +55,14 @@ export const ShowreelModal: React.FC<ShowreelModalProps> = ({ isOpen, onClose })
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/85 backdrop-blur-md"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/85 backdrop-blur-md backdrop-blur-safari overflow-y-auto"
       role="dialog"
       aria-modal="true"
       aria-labelledby="showreel-modal-title"
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-4xl bg-[#13141C] border border-[#27273A] rounded-3xl overflow-hidden shadow-2xl"
+        className="relative w-full max-w-4xl bg-[#13141C] border border-[#27273A] rounded-3xl overflow-hidden shadow-2xl my-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Top Header */}
@@ -68,7 +85,7 @@ export const ShowreelModal: React.FC<ShowreelModalProps> = ({ isOpen, onClose })
 
         {/* Interactive Visual Stage */}
         <div className="relative aspect-video w-full bg-[#09090F] overflow-hidden">
-          <ShowreelSynthwaveArtSVG />
+          <ShowreelSynthwaveArtSVG idPrefix="modal" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#09090F] via-black/30 to-transparent" />
 
           {/* Overlay Player Controls */}
@@ -112,6 +129,7 @@ export const ShowreelModal: React.FC<ShowreelModalProps> = ({ isOpen, onClose })
                     key={chap.time}
                     type="button"
                     onClick={() => {
+                      comicAudio.playComicPop();
                       setActiveChapterIdx(idx);
                       setIsPlaying(true);
                     }}
@@ -156,16 +174,20 @@ export const CardDetailModal: React.FC<CardDetailModalProps> = ({
       if (e.key === 'Escape') onClose();
     };
     if (item) {
+      document.body.style.overflow = 'hidden';
       window.addEventListener('keydown', handleKeyDown);
     }
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', handleKeyDown);
+    };
   }, [item, onClose]);
 
   if (!item) return null;
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/85 backdrop-blur-md"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/85 backdrop-blur-md backdrop-blur-safari"
       role="dialog"
       aria-modal="true"
       aria-labelledby="card-detail-title"
@@ -265,6 +287,8 @@ interface MenuDrawerModalProps {
   onSelectCategory: (cat: CategoryKey) => void;
   onSelectCard: (item: GeekCardItem) => void;
   savedIds: string[];
+  isAudioMuted: boolean;
+  onToggleAudioMute: () => void;
 }
 
 export const MenuDrawerModal: React.FC<MenuDrawerModalProps> = ({
@@ -274,6 +298,8 @@ export const MenuDrawerModal: React.FC<MenuDrawerModalProps> = ({
   onSelectCategory,
   onSelectCard,
   savedIds,
+  isAudioMuted,
+  onToggleAudioMute,
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -282,9 +308,13 @@ export const MenuDrawerModal: React.FC<MenuDrawerModalProps> = ({
       if (e.key === 'Escape') onClose();
     };
     if (isOpen) {
+      document.body.style.overflow = 'hidden';
       window.addEventListener('keydown', handleKeyDown);
     }
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', handleKeyDown);
+    };
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;
@@ -303,7 +333,7 @@ export const MenuDrawerModal: React.FC<MenuDrawerModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex justify-end bg-black/80 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex justify-end bg-black/80 backdrop-blur-sm backdrop-blur-safari"
       role="dialog"
       aria-modal="true"
       aria-label="Menú principal y buscador de Imperio Geek"
@@ -432,19 +462,43 @@ export const MenuDrawerModal: React.FC<MenuDrawerModalProps> = ({
           </div>
         </div>
 
-        {/* Footer Info inside Drawer */}
-        <div className="pt-6 border-t border-[#232536] mt-6 flex items-center justify-between text-xs text-zinc-400">
-          <span className="flex items-center gap-1.5">
-            <Calendar className="w-3.5 h-3.5 text-[#7C3AED]" />
-            <span>Edición Octubre 2026</span>
-          </span>
-          <a
-            href="#tendencias"
-            onClick={onClose}
-            className="text-[#B8FF01] hover:underline font-medium"
+        {/* Footer Info & Audio FX Toggle inside Drawer */}
+        <div className="pt-5 border-t border-[#232536] mt-6 space-y-3">
+          <button
+            type="button"
+            onClick={onToggleAudioMute}
+            className="w-full px-3.5 py-2.5 rounded-xl bg-[#181A28] hover:bg-[#222538] border border-[#2C2F45] flex items-center justify-between text-xs font-semibold text-white transition-colors cursor-pointer"
           >
-            Ver calendario →
-          </a>
+            <span className="flex items-center gap-2">
+              {isAudioMuted ? (
+                <VolumeX className="w-4 h-4 text-zinc-400" />
+              ) : (
+                <Volume2 className="w-4 h-4 text-[#B8FF01]" />
+              )}
+              <span>Efectos Sonoros Cómic (Web Audio)</span>
+            </span>
+            <span
+              className={`font-mono-tabular text-[11px] font-bold ${
+                isAudioMuted ? 'text-zinc-400' : 'text-[#B8FF01]'
+              }`}
+            >
+              {isAudioMuted ? 'SILENCIADO' : 'ACTIVO'}
+            </span>
+          </button>
+
+          <div className="flex items-center justify-between text-xs text-zinc-400">
+            <span className="flex items-center gap-1.5">
+              <Calendar className="w-3.5 h-3.5 text-[#7C3AED]" />
+              <span>Edición Octubre 2026</span>
+            </span>
+            <a
+              href="#tendencias"
+              onClick={onClose}
+              className="text-[#B8FF01] hover:underline font-medium"
+            >
+              Ver calendario →
+            </a>
+          </div>
         </div>
       </div>
     </div>
