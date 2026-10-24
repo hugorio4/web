@@ -1,0 +1,6 @@
+{
+  "name": "Imperio Geek — Universo de Cultura Pop, Gaming, Cine y Cómics",
+  "description": "Landing page creativa estilo cómic y animación 2D para Imperio Geek: novedades de videojuegos, cine, series, cómics, tecnología y próximos estrenos.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
