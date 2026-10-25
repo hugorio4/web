@@ -1,12 +1,29 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
-import {defineConfig} from 'vite';
+import {defineConfig, Plugin} from 'vite';
+
+function viteEntrySwapPlugin(): Plugin {
+  return {
+    name: 'vite-entry-swap',
+    transformIndexHtml: {
+      order: 'pre',
+      handler(html) {
+        return html
+          .replace(/<link[^>]*data-static-fallback[^>]*>\s*/g, '')
+          .replace(
+            /<script[^>]*data-static-fallback[^>]*><\/script>/g,
+            '<script type="module" src="/src/main.tsx"></script>'
+          );
+      },
+    },
+  };
+}
 
 export default defineConfig(() => {
   return {
     base: './',
-    plugins: [react(), tailwindcss()],
+    plugins: [viteEntrySwapPlugin(), react(), tailwindcss()],
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),
